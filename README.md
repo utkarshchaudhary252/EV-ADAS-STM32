@@ -146,50 +146,41 @@ input acquisition, sensor timing, communication, and warning outputs.
 | TIM2 | Microsecond timing for HC-SR04 |
 | TIM3 | ADAS / sensor periodic update |
 
-                  ┌────────────────────────┐
-                  │     Vehicle Inputs     │
-                  │                        │
-                  │ Accelerator            │
-                  │ Brake                  │
-                  │ Battery SOC            │
-                  │ Temperature            │
-                  └───────────┬────────────┘
-                              │
-                              ▼
-                  ┌────────────────────────┐
-                  │     STM32F103C8T6       │
-                  │    Main Controller      │
-                  └───────────┬────────────┘
-                              │
-             ┌────────────────┴────────────────┐
-             │                                 │
-             ▼                                 ▼
-   ┌────────────────────┐           ┌────────────────────┐
-   │    EV CONTROL      │           │   ADAS PROCESSING  │
-   │                    │           │                    │
-   │ Speed              │           │ Distance           │
-   │ Torque             │           │ TTC                │
-   │ SOC                │           │ FCW                │
-   │ Temperature        │           │ BSD                │
-   │ Power              │           │ Overspeed          │
-   │ Range              │           │                    │
-   └──────────┬─────────┘           └──────────┬─────────┘
-              │                                │
-              └────────────────┬───────────────┘
-                               │
-                               ▼
-                    ┌────────────────────┐
-                    │  FAULT MANAGEMENT  │
-                    │                    │
-                    │ Over Temperature  │
-                    │ Low SOC           │
-                    │ Collision         │
-                    └─────────┬──────────┘
-                              │
-                              ▼
-                    ┌────────────────────┐
-                    │ WARNING / STATUS   │
-                    │                    │
-                    │ LEDs               │
-                    │ UART               │
-                    └────────────────────┘
+UART
+
+UART is used for:
+
+Debugging
+System status
+Parameter injection
+Testing
+Command processing
+📡 Ultrasonic Sensor Configuration
+
+Three HC-SR04 sensors are used for environmental sensing.
+
+                    FRONT
+                      │
+                      ▼
+                ┌───────────┐
+                │  HC-SR04  │
+                └───────────┘
+                      │
+                      │
+        ┌─────────────┴─────────────┐
+        │                           │
+        ▼                           ▼
+ ┌─────────────┐             ┌─────────────┐
+ │ HC-SR04     │             │ HC-SR04     │
+ │ LEFT        │             │ RIGHT       │
+ └─────────────┘             └─────────────┘
+        │                           │
+        ▼                           ▼
+  Blind Spot                   Blind Spot
+  Detection                    Detection
+
+  Sensor Functions
+Sensor	Function
+Front	Forward obstacle detection / FCW
+Left	Left blind spot detection
+Right	Right blind spot detection
